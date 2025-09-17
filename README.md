@@ -1,5 +1,6 @@
-# 🧠 IntelliMind Assistant
+<img width="173" height="164" alt="image" src="https://github.com/user-attachments/assets/432b8ada-4374-4cda-aa2d-d47e56ee3d07" /># 🧠 IntelliMind Assistant
 Open for collaborations and really appreciate for the feature advice and bug reports!
+<img width="1165" height="894" alt="image" src="https://github.com/user-attachments/assets/1001221b-f2d2-4633-bc58-395756d511f8" />
 
 ## ✨ Features
 
