@@ -4,12 +4,36 @@ class IntelliMindApp {
         this.chatMessages = document.getElementById('chatMessages');
         this.messageInput = document.getElementById('messageInput');
         this.sendButton = document.getElementById('sendButton');
+        this.voiceButton = document.getElementById('voiceButton');
+        this.speakButton = document.getElementById('speakButton');
         this.clearButton = document.getElementById('clearButton');
         this.statusIndicator = document.getElementById('statusIndicator');
         this.loadingOverlay = document.getElementById('loadingOverlay');
         this.charCount = document.getElementById('charCount');
         
+        // Settings modal elements
+        this.settingsModal = document.getElementById('settingsModal');
+        this.settingsButton = document.getElementById('settingsButton');
+        this.closeSettings = document.getElementById('closeSettings');
+        
+        // Voice recognition and speech synthesis
+        this.recognition = null;
+        this.synthesis = window.speechSynthesis;
+        this.isListening = false;
+        this.isSpeaking = false;
+        this.lastAssistantMessage = '';
+        
+        // Voice settings
+        this.voiceSettings = {
+            rate: 0.9,
+            pitch: 1,
+            volume: 0.8,
+            lang: 'en-US'
+        };
+        
         this.initializeEventListeners();
+        this.initializeVoiceFeatures();
+        this.initializeSettings();
         this.setWelcomeTime();
         this.updateCharacterCount();
     }
@@ -17,6 +41,16 @@ class IntelliMindApp {
     initializeEventListeners() {
         // Send message on button click
         this.sendButton.addEventListener('click', () => this.sendMessage());
+        
+        // Voice button click
+        this.voiceButton.addEventListener('click', () => this.toggleVoiceRecognition());
+        
+        // Speak button click
+        this.speakButton.addEventListener('click', () => this.speakLastResponse());
+        
+        // Settings button click
+        this.settingsButton.addEventListener('click', () => this.openSettings());
+        this.closeSettings.addEventListener('click', () => this.closeSettingsModal());
         
         // Send message on Enter key (but allow Shift+Enter for new lines)
         this.messageInput.addEventListener('keydown', (e) => {
@@ -37,6 +71,190 @@ class IntelliMindApp {
         
         // Focus input on load
         this.messageInput.focus();
+    }
+    
+    initializeVoiceFeatures() {
+        // Initialize speech recognition
+        if ('webkitSpeechRecognition' in window) {
+            this.recognition = new webkitSpeechRecognition();
+        } else if ('SpeechRecognition' in window) {
+            this.recognition = new SpeechRecognition();
+        } else {
+            console.warn('Speech recognition not supported in this browser');
+            this.voiceButton.style.display = 'none';
+            return;
+        }
+        
+        // Configure speech recognition
+        this.recognition.continuous = false;
+        this.recognition.interimResults = false;
+        this.recognition.lang = 'en-US';
+        
+        // Speech recognition event handlers
+        this.recognition.onstart = () => {
+            this.isListening = true;
+            this.voiceButton.classList.add('listening');
+            this.voiceButton.innerHTML = '<i class="fas fa-stop"></i>';
+            this.updateStatus('Listening...', 'typing');
+        };
+        
+        this.recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            this.messageInput.value = transcript;
+            this.updateCharacterCount();
+            this.autoResizeTextarea();
+        };
+        
+        this.recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            this.updateStatus('Voice recognition error', 'error');
+        };
+        
+        this.recognition.onend = () => {
+            this.isListening = false;
+            this.voiceButton.classList.remove('listening');
+            this.voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+            this.updateStatus('Ready', 'ready');
+        };
+        
+        // Check if speech synthesis is supported
+        if (!this.synthesis) {
+            console.warn('Speech synthesis not supported in this browser');
+            this.speakButton.style.display = 'none';
+        }
+    }
+    
+    toggleVoiceRecognition() {
+        if (this.isListening) {
+            this.recognition.stop();
+        } else {
+            this.recognition.start();
+        }
+    }
+    
+    speakLastResponse() {
+        if (this.isSpeaking) {
+            this.synthesis.cancel();
+            this.isSpeaking = false;
+            this.speakButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+            this.updateStatus('Speech stopped', 'ready');
+            return;
+        }
+        
+        if (!this.lastAssistantMessage) {
+            this.updateStatus('No message to speak', 'error');
+            return;
+        }
+        
+        this.isSpeaking = true;
+        this.speakButton.innerHTML = '<i class="fas fa-stop"></i>';
+        this.updateStatus('Speaking...', 'typing');
+        
+        const utterance = new SpeechSynthesisUtterance(this.lastAssistantMessage);
+        utterance.rate = this.voiceSettings.rate;
+        utterance.pitch = this.voiceSettings.pitch;
+        utterance.volume = this.voiceSettings.volume;
+        utterance.lang = this.voiceSettings.lang;
+        
+        utterance.onend = () => {
+            this.isSpeaking = false;
+            this.speakButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+            this.updateStatus('Ready', 'ready');
+        };
+        
+        utterance.onerror = (event) => {
+            console.error('Speech synthesis error:', event.error);
+            this.isSpeaking = false;
+            this.speakButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+            this.updateStatus('Speech error', 'error');
+        };
+        
+        this.synthesis.speak(utterance);
+    }
+    
+    initializeSettings() {
+        // Load saved settings from localStorage
+        const savedSettings = localStorage.getItem('intellimind-voice-settings');
+        if (savedSettings) {
+            this.voiceSettings = { ...this.voiceSettings, ...JSON.parse(savedSettings) };
+        }
+        
+        // Set up settings controls
+        const rateSlider = document.getElementById('voiceRate');
+        const pitchSlider = document.getElementById('voicePitch');
+        const volumeSlider = document.getElementById('voiceVolume');
+        const langSelect = document.getElementById('voiceLang');
+        const testButton = document.getElementById('testVoice');
+        
+        // Update sliders with current values
+        rateSlider.value = this.voiceSettings.rate;
+        pitchSlider.value = this.voiceSettings.pitch;
+        volumeSlider.value = this.voiceSettings.volume;
+        langSelect.value = this.voiceSettings.lang;
+        
+        // Update display values
+        document.getElementById('rateValue').textContent = this.voiceSettings.rate;
+        document.getElementById('pitchValue').textContent = this.voiceSettings.pitch;
+        document.getElementById('volumeValue').textContent = this.voiceSettings.volume;
+        
+        // Add event listeners for settings
+        rateSlider.addEventListener('input', (e) => {
+            this.voiceSettings.rate = parseFloat(e.target.value);
+            document.getElementById('rateValue').textContent = e.target.value;
+            this.saveSettings();
+        });
+        
+        pitchSlider.addEventListener('input', (e) => {
+            this.voiceSettings.pitch = parseFloat(e.target.value);
+            document.getElementById('pitchValue').textContent = e.target.value;
+            this.saveSettings();
+        });
+        
+        volumeSlider.addEventListener('input', (e) => {
+            this.voiceSettings.volume = parseFloat(e.target.value);
+            document.getElementById('volumeValue').textContent = e.target.value;
+            this.saveSettings();
+        });
+        
+        langSelect.addEventListener('change', (e) => {
+            this.voiceSettings.lang = e.target.value;
+            if (this.recognition) {
+                this.recognition.lang = e.target.value;
+            }
+            this.saveSettings();
+        });
+        
+        testButton.addEventListener('click', () => this.testVoiceSettings());
+        
+        // Close modal when clicking outside
+        this.settingsModal.addEventListener('click', (e) => {
+            if (e.target === this.settingsModal) {
+                this.closeSettingsModal();
+            }
+        });
+    }
+    
+    openSettings() {
+        this.settingsModal.classList.add('show');
+    }
+    
+    closeSettingsModal() {
+        this.settingsModal.classList.remove('show');
+    }
+    
+    saveSettings() {
+        localStorage.setItem('intellimind-voice-settings', JSON.stringify(this.voiceSettings));
+    }
+    
+    testVoiceSettings() {
+        const testText = "Hello! This is a test of your voice settings. How does this sound?";
+        const utterance = new SpeechSynthesisUtterance(testText);
+        utterance.rate = this.voiceSettings.rate;
+        utterance.pitch = this.voiceSettings.pitch;
+        utterance.volume = this.voiceSettings.volume;
+        utterance.lang = this.voiceSettings.lang;
+        
+        this.synthesis.speak(utterance);
     }
     
     setWelcomeTime() {
@@ -133,6 +351,12 @@ class IntelliMindApp {
         `;
         
         this.chatMessages.appendChild(messageDiv);
+        
+        // Store the last assistant message for text-to-speech
+        if (sender === 'assistant') {
+            this.lastAssistantMessage = text;
+        }
+        
         this.scrollToBottom();
     }
     
@@ -166,6 +390,8 @@ class IntelliMindApp {
             
             if (data.status === 'success') {
                 // Clear the chat messages (keep only the welcome message)
+                const welcomeMessage = "Hello! I'm IntelliMind Assistant, your intelligent AI companion. I'm powered by Sentient's advanced framework and FireworksAI's cutting-edge models. How can I help you today?";
+                
                 this.chatMessages.innerHTML = `
                     <div class="message assistant-message">
                         <div class="message-avatar">
@@ -173,12 +399,15 @@ class IntelliMindApp {
                         </div>
                         <div class="message-content">
                             <div class="message-text">
-                                Hello! I'm IntelliMind Assistant, your intelligent AI companion. I'm powered by Sentient's advanced framework and FireworksAI's cutting-edge models. How can I help you today?
+                                ${welcomeMessage}
                             </div>
                             <div class="message-time">${this.getCurrentTime()}</div>
                         </div>
                     </div>
                 `;
+                
+                // Update the last assistant message for text-to-speech
+                this.lastAssistantMessage = welcomeMessage;
                 
                 this.updateStatus('Conversation cleared', 'ready');
                 setTimeout(() => this.updateStatus('Ready', 'ready'), 2000);

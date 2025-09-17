@@ -44,19 +44,30 @@
                 <div class="input-container">
                     <textarea 
                         id="messageInput" 
-                        placeholder="Type your message here..." 
+                        placeholder="Type your message here or click the microphone to speak..." 
                         rows="1"
                         maxlength="1000"
                     ></textarea>
+                    <button id="voiceButton" class="voice-button" title="Click to speak">
+                        <i class="fas fa-microphone"></i>
+                    </button>
                     <button id="sendButton" class="send-button">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
                 <div class="input-footer">
-                    <button id="clearButton" class="clear-button">
-                        <i class="fas fa-trash"></i>
-                        Clear Conversation
-                    </button>
+                    <div class="left-controls">
+                        <button id="clearButton" class="clear-button">
+                            <i class="fas fa-trash"></i>
+                            Clear Conversation
+                        </button>
+                        <button id="speakButton" class="speak-button" title="Read last response">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                        <button id="settingsButton" class="settings-button" title="Voice Settings">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
                     <div class="character-count">
                         <span id="charCount">0</span>/1000
                     </div>
@@ -76,6 +87,51 @@
         <div class="loading-spinner">
             <div class="spinner"></div>
             <p>IntelliMind is thinking...</p>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h3>Voice Settings</h3>
+                <button id="closeSettings" class="close-settings">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="settings-body">
+                <div class="setting-group">
+                    <label for="voiceRate">Speech Rate:</label>
+                    <input type="range" id="voiceRate" min="0.5" max="2" step="0.1" value="0.9">
+                    <span id="rateValue">0.9</span>
+                </div>
+                <div class="setting-group">
+                    <label for="voicePitch">Speech Pitch:</label>
+                    <input type="range" id="voicePitch" min="0" max="2" step="0.1" value="1">
+                    <span id="pitchValue">1</span>
+                </div>
+                <div class="setting-group">
+                    <label for="voiceVolume">Speech Volume:</label>
+                    <input type="range" id="voiceVolume" min="0" max="1" step="0.1" value="0.8">
+                    <span id="volumeValue">0.8</span>
+                </div>
+                <div class="setting-group">
+                    <label for="voiceLang">Voice Language:</label>
+                    <select id="voiceLang">
+                        <option value="en-US">English (US)</option>
+                        <option value="en-GB">English (UK)</option>
+                        <option value="es-ES">Spanish</option>
+                        <option value="fr-FR">French</option>
+                        <option value="de-DE">German</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <button id="testVoice" class="test-voice-button">
+                        <i class="fas fa-play"></i>
+                        Test Voice
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
