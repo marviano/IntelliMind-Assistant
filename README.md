@@ -1,4 +1,5 @@
 # 🧠 IntelliMind Assistant
+Open for collaborations and really appreciate for the feature advice and bug reports!
 
 ## ✨ Features
 
