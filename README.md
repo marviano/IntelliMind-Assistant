@@ -1,15 +1,11 @@
 # 🧠 IntelliMind Assistant
 
-A sophisticated AI assistant application that leverages Sentient's advanced models and FireworksAI's API endpoints to provide intelligent conversational capabilities.
-
 ## ✨ Features
 
-- **Smart Conversations**: Powered by Sentient's ROMA framework and FireworksAI models
+- Powered by Sentient's ROMA framework and FireworksAI models
 - **Context Awareness**: Maintains conversation context for better responses
-- **Modern Web Interface**: Clean, responsive design with real-time chat
-- **API Integration**: Seamless integration with FireworksAI's API endpoints
+- **API Integration**:Integration with FireworksAI's API endpoints
 - **Easy Setup**: Automated setup script and configuration
-- **Error Handling**: Robust error handling and user feedback
 
 ## 🚀 Quick Start
 
@@ -126,12 +122,10 @@ For detailed troubleshooting, see [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)
 
 ## 🤝 Contributing
 
-This application demonstrates the integration of Sentient's AI framework with modern web technologies and FireworksAI's powerful API endpoints.
+Any feature recommendations/advice will be really helpful
 
 ## 📄 License
 
 This project is open source and available under the MIT License.
 
 ---
-
-**Built with ❤️ using Sentient's Framework and FireworksAI**
