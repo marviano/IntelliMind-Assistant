@@ -13,7 +13,7 @@ echo
 # Configuration
 APP_NAME="intellimind"
 APP_DIR="/var/www/intellimind"
-DOMAIN="intellimind.yourdomain.com"  # Change this to your desired domain
+DOMAIN="217.217.252.95"  # Using VPS IP address for now
 PYTHON_VERSION="3.11"  # Adjust based on your VPS Python version
 
 # Colors for output
@@ -117,18 +117,6 @@ tee /etc/nginx/sites-available/$APP_NAME << EOF
 server {
     listen 80;
     server_name $DOMAIN;
-
-    # Redirect HTTP to HTTPS
-    return 301 https://\$server_name\$request_uri;
-}
-
-server {
-    listen 443 ssl http2;
-    server_name $DOMAIN;
-
-    # SSL Configuration (you'll need to set up SSL certificates)
-    # ssl_certificate /path/to/your/certificate.crt;
-    # ssl_certificate_key /path/to/your/private.key;
 
     # Security headers
     add_header X-Frame-Options "SAMEORIGIN" always;
