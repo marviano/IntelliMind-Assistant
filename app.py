@@ -104,6 +104,11 @@ def clear_chat():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/updates')
+def updates():
+    """Update log page"""
+    return render_template('updates.html')
+
 @app.route('/health')
 def health():
     """Health check endpoint"""

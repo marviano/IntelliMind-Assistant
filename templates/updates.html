@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Log - IntelliMind Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .update-log-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .update-log-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .update-log-header h1 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        .update-log-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .version-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .version-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .version-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e40af;
+        }
+        
+        .version-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .feature-section {
+            margin-bottom: 20px;
+        }
+        
+        .feature-section h3 {
+            color: #374151;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 5px 0;
+            color: #4b5563;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .feature-list li:before {
+            content: "•";
+            color: #059669;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #2563eb;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .back-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 768px) {
+            .version-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .update-log-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Chat
+        </a>
+        
+        <div class="update-log-container">
+            <div class="update-log-header">
+                <h1>Update Log</h1>
+                <p>Development history and feature releases</p>
+            </div>
+            
+            <div class="version-card">
+                <div class="version-header">
+                    <div class="version-number">Version 2.0</div>
+                    <div class="version-date">17 September 2025</div>
+                </div>
+                
+                <div class="feature-section">
+                    <h3>New Features</h3>
+                    <ul class="feature-list">
+                        <li>Voice input using speech recognition</li>
+                        <li>Text-to-speech for AI responses</li>
+                        <li>Customizable voice settings (rate, pitch, volume, language)</li>
+                        <li>Voice controls integrated into chat interface</li>
+                        <li>Settings panel for voice preferences</li>
+                        <li>Mobile-optimized voice controls</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-section">
+                    <h3>Technical Improvements</h3>
+                    <ul class="feature-list">
+                        <li>Web Speech API integration</li>
+                        <li>Responsive design enhancements</li>
+                        <li>Local storage for user preferences</li>
+                        <li>Cross-browser compatibility</li>
+                        <li>Error handling for voice features</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="version-card">
+                <div class="version-header">
+                    <div class="version-number">Version 1.0</div>
+                    <div class="version-date">14 September 2025</div>
+                </div>
+                
+                <div class="feature-section">
+                    <h3>Core Features</h3>
+                    <ul class="feature-list">
+                        <li>AI chat interface powered by FireworksAI</li>
+                        <li>Real-time conversation with context awareness</li>
+                        <li>Clean, modern web interface</li>
+                        <li>Responsive design for mobile devices</li>
+                        <li>Conversation history management</li>
+                        <li>Health monitoring endpoints</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-section">
+                    <h3>Technical Foundation</h3>
+                    <ul class="feature-list">
+                        <li>Flask backend with FireworksAI integration</li>
+                        <li>Modern JavaScript frontend</li>
+                        <li>RESTful API architecture</li>
+                        <li>Environment-based configuration</li>
+                        <li>Production deployment ready</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

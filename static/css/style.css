@@ -25,11 +25,11 @@ body {
 /* Header Styles */
 .header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 30px;
+    border-radius: 8px;
+    padding: 15px 20px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -42,17 +42,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    margin-bottom: 10px;
+    gap: 10px;
+    margin-bottom: 5px;
 }
 
 .logo i {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     color: #2563eb;
 }
 
 .logo h1 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: #1e40af;
 }
@@ -79,8 +79,28 @@ body {
 
 .subtitle {
     color: #666;
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 400;
+    margin-bottom: 5px;
+}
+
+.header-links {
+    margin-top: 5px;
+}
+
+.update-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.update-link:hover {
+    background: #f8f9fa;
+    color: #1d4ed8;
 }
 
 /* Chat Container */
@@ -97,9 +117,9 @@ body {
 
 .chat-messages {
     flex: 1;
-    padding: 30px;
+    padding: 20px;
     overflow-y: auto;
-    max-height: 60vh;
+    max-height: 70vh;
     scroll-behavior: smooth;
 }
 
@@ -546,16 +566,20 @@ body {
     }
     
     .header {
-        padding: 20px;
+        padding: 12px 15px;
     }
     
     .logo h1 {
-        font-size: 2rem;
+        font-size: 1.5rem;
+    }
+    
+    .logo i {
+        font-size: 1.5rem;
     }
     
     .chat-messages {
-        padding: 20px;
-        max-height: 50vh;
+        padding: 15px;
+        max-height: 65vh;
     }
     
     .input-area {
