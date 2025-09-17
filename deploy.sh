@@ -39,11 +39,7 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Check if running as root
-if [[ $EUID -eq 0 ]]; then
-   print_error "This script should not be run as root for security reasons"
-   exit 1
-fi
+# Note: This script can be run as root for VPS deployment
 
 # Check if we're in the right directory
 if [ ! -f "app.py" ]; then
@@ -53,15 +49,13 @@ fi
 
 print_status "Starting deployment process..."
 
-# Step 1: Create application directory
-print_status "Creating application directory..."
-sudo mkdir -p $APP_DIR
-sudo chown -R $USER:$USER $APP_DIR
+# Step 1: Create application directory (if needed)
+print_status "Ensuring application directory exists..."
+mkdir -p $APP_DIR
 
-# Step 2: Copy application files
-print_status "Copying application files..."
-cp -r . $APP_DIR/
-cd $APP_DIR
+# Step 2: We're already in the right directory
+print_status "Application files already in place..."
+# cd $APP_DIR  # We're already here
 
 # Step 3: Set up Python virtual environment
 print_status "Setting up Python virtual environment..."
@@ -89,8 +83,8 @@ print_warning "Please edit $APP_DIR/.env and add your FireworksAI API key!"
 
 # Step 6: Set proper permissions
 print_status "Setting proper permissions..."
-sudo chown -R www-data:www-data $APP_DIR
-sudo chmod -R 755 $APP_DIR
+chown -R www-data:www-data $APP_DIR
+chmod -R 755 $APP_DIR
 
 # Step 7: Create PM2 ecosystem file
 print_status "Creating PM2 configuration..."
@@ -119,7 +113,7 @@ EOF
 
 # Step 8: Create Nginx configuration
 print_status "Creating Nginx configuration..."
-sudo tee /etc/nginx/sites-available/$APP_NAME << EOF
+tee /etc/nginx/sites-available/$APP_NAME << EOF
 server {
     listen 80;
     server_name $DOMAIN;
@@ -179,8 +173,8 @@ EOF
 
 # Step 9: Enable Nginx site
 print_status "Enabling Nginx site..."
-sudo ln -sf /etc/nginx/sites-available/$APP_NAME /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
+ln -sf /etc/nginx/sites-available/$APP_NAME /etc/nginx/sites-enabled/
+nginx -t && systemctl reload nginx
 
 # Step 10: Start application with PM2
 print_status "Starting application with PM2..."
