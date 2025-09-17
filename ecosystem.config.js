@@ -1,8 +1,8 @@
 module.exports = {
   apps: [{
     name: 'intellimind',
-    script: 'venv/bin/gunicorn',
-    args: '--bind 0.0.0.0:5000 --workers 4 --timeout 120 --access-logfile - --error-logfile - app:app',
+    script: 'python',
+    args: 'venv/bin/gunicorn --bind 0.0.0.0:5000 --workers 4 --timeout 120 --access-logfile - --error-logfile - app:app',
     cwd: '/var/www/intellimind',
     instances: 1,
     autorestart: true,
